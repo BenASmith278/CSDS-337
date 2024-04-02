@@ -1,0 +1,1 @@
+/usr/bin/c++ "CMakeFiles/LLVM-Lab.dir/src/main.cpp.o" -o bin/LLVM-Lab  -L/usr/lib  -lLLVM-16 

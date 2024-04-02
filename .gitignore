@@ -1,0 +1,14 @@
+.vscode
+/build
+/notes
+/project
+/textbook
+/dragon-front-source
+__MACOSX
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
+*PG*.out
+*PG*.log
+Archive.zip

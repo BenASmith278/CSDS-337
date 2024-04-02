@@ -1,0 +1,7 @@
+bool goober (String i) {
+    if (i == "yes") {
+        return false;
+    } else {
+        return true;
+    } 
+}

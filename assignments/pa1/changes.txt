@@ -1,0 +1,11 @@
+Problem 1:
+1. add tag FOR in lexer/Tag.java
+2. reserve keyword "for" in lexer/Lexer.java
+3. create class For in inter/
+4. add Tag.FOR switch case in parser/Parser.java::stmt
+
+Problem 2:
+1. add tag DIV in lexer/Tag.java
+2. reserve keyword "div" in lexer/Lexer.java
+3. add line to inter/Arith.java to force div type to int
+4. add method Expr div() in Parser.java

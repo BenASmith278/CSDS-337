@@ -1,0 +1,24 @@
+[
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-o",
+            "parser",
+            "parser.tab.c"
+        ],
+        "directory": "/home/ben/Documents/csds337/assignments/pa2/starter_code",
+        "file": "parser.tab.c"
+    },
+    {
+        "arguments": [
+            "cc",
+            "-c",
+            "-o",
+            "parser",
+            "lex.yy.c"
+        ],
+        "directory": "/home/ben/Documents/csds337/assignments/pa2/starter_code",
+        "file": "lex.yy.c"
+    }
+]

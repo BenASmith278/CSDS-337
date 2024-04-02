@@ -1,0 +1,11 @@
+/* multicomment */
+/*
+multicomment
+*/q
+
+/*
+/
+* for()
+**
+/*
+*/

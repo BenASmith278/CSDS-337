@@ -11,4 +11,6 @@ __MACOSX
 *.synctex.gz
 *PG*.out
 *PG*.log
+*PS*.log
+*PS*.out
 Archive.zip

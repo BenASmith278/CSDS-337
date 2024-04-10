@@ -24,6 +24,7 @@ static std::stringstream ss;
 "if" {return IF;}
 "else" {return ELSE;}
 "while" {return WHILE;}
+"for" {return FOR;}
 "break" {return BREAK;}
 "return" {return RETURN;}
 "=" {return EQUALS_SIGN;}

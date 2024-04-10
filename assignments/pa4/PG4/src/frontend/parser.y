@@ -23,6 +23,7 @@
 #include "../src/expressions/or.h"
 #include "../src/statements/block.h"
 #include "../src/statements/while.h"
+#include "../src/statements/for.h"
 #include "../src/statements/if.h"
 #include "../src/statements/return.h"
 #include "../src/types/simple.h"
@@ -62,7 +63,7 @@ extern FILE *yyin;
   ASTExpressionComparisonType rel;
 }
 
-%token ID BOOL_TYPE INT_TYPE FLOAT_TYPE STRING_TYPE VOID_TYPE SEMICOLON LPAREN RPAREN COMMA LBRACE RBRACE IF ELSE WHILE BREAK RETURN EQUALS_SIGN LOGICAL_OR LOGICAL_AND LOGICAL_NOT RELOP_GT RELOP_LT RELOP_GE RELOP_LE RELOP_EQ RELOP_NE ARITH_PLUS ARITH_MINUS ARITH_MULT ARITH_DIV ARITH_MOD VARIADIC BOOL_LITERAL INT_LITERAL FLOAT_LITERAL STRING_LITERAL EOL
+%token ID BOOL_TYPE INT_TYPE FLOAT_TYPE STRING_TYPE VOID_TYPE SEMICOLON LPAREN RPAREN COMMA LBRACE RBRACE IF ELSE WHILE FOR BREAK RETURN EQUALS_SIGN LOGICAL_OR LOGICAL_AND LOGICAL_NOT RELOP_GT RELOP_LT RELOP_GE RELOP_LE RELOP_EQ RELOP_NE ARITH_PLUS ARITH_MINUS ARITH_MULT ARITH_DIV ARITH_MOD VARIADIC BOOL_LITERAL INT_LITERAL FLOAT_LITERAL STRING_LITERAL EOL
 
 %type <boolval> BOOL_LITERAL
 %type <strval> ID STRING_LITERAL
@@ -88,13 +89,13 @@ dec: funDef | funDec ;
 type: BOOL_TYPE {
   $$ = new VarTypeSimple(VarTypeSimple::BoolType);
  }| INT_TYPE {
-  /* fill in */
+  $$ = new VarTypeSimple(VarTypeSimple::IntType);
  }| FLOAT_TYPE {
-  /* fill in */
+  $$ = new VarTypeSimple(VarTypeSimple::FloatType);
  }| STRING_TYPE {
-  /* fill in */
+  $$ = new VarTypeSimple(VarTypeSimple::StringType);
  } | VOID_TYPE {
-  /* fill in */
+  $$ = new VarTypeSimple(VarTypeSimple::VoidType);
  };
 varDec: type ID {
   //ASTFunctionParameter is just a tuple of a unique pointer to a type and a string (see definition in function.h)
@@ -128,6 +129,24 @@ funDef: type ID LPAREN params RPAREN LBRACE varDecs stmts RBRACE {
    * - Then, create the parameters and make the function, as above.
    * - Add the variables in "varDecs" to the function as stack variables.
    * - Define the function by the ASTStatementBlock. */
+  auto statements = ASTStatementBlock();
+  auto parameters = ASTFunctionParameters();
+  auto declarations = ASTFunctionParameters();
+  bool variadic = false;
+  for(auto s : *$8) {
+    statements->statements.push_back(std::unique_ptr<ASTStatement>(s));
+  }
+
+  for(auto p : *$4) {
+    if (p) parameters.push_back(std::move(*p));
+    else variadic = true;
+  }
+  auto f = ast.AddFunction($2, std::unique_ptr<VarType>($1), std::move(parameters), variadic)
+
+  for(auto d : *$7) {
+    f.AddStackVar(std::move(*d));
+  }
+  auto p = f.Define(std::unique_ptr<ASTStatement>(statementBlock));
  };
 params: paramList | {$$ = new std::vector<ASTFunctionParameter *>();};
 paramList: paramList COMMA type ID { // This works similarly to varDecs
@@ -165,14 +184,17 @@ selStmt: IF LPAREN expr RPAREN stmt {
   $$ = new ASTStatementIf(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTStatement>($5), std::unique_ptr<ASTStatement>(nullptr));
  } | IF LPAREN expr RPAREN stmt ELSE stmt {
   /* fill in */
+  $$ = new ASTStatementIf(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTStatement>($5), std::unique_ptr<ASTStatement>($7));
  };
 
 iterStmt: WHILE LPAREN expr RPAREN stmt {
   /* fill in */
+  $$ = new ASTStatementWhile(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTExpression>($5));
+ } | FOR LPAREN expr SEMICOLON expr SEMICOLON expr RPAREN stmt {
+  $$ = new ASTStatementFor(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTExpression>($5), std::unique_ptr<ASTExpression>($7), std::unique_ptr<ASTExpression>($9));
  };
 
 /* fill in grammar and code action for for-loops */
-
 
 jumpStmt: RETURN SEMICOLON {
   auto retStmt = new ASTStatementReturn();
@@ -180,16 +202,20 @@ jumpStmt: RETURN SEMICOLON {
   $$ = retStmt;
  }| RETURN expr SEMICOLON {
   /* fill in */
+  auto retStmt = new ASTStatementReturn();
+  retStmt->returnExpression = std::unique_ptr<ASTExpression>($2);
  }; /* There should also be break statements here, but they are not implemented in the AST */
 
 expr: orExpr { $$ = $1;} | ID EQUALS_SIGN expr {
   /* fill in (create an ASTExpressionAssignment) */
+  $$ = new ASTExpressionAssignment(std::unique_ptr<ASTExpression>($1), std::unique_ptr<ASTExpression>($3));
  };
 orExpr: andExpr {$$ = $1;} | orExpr LOGICAL_OR andExpr {
   $$ = new ASTExpressionOr(std::unique_ptr<ASTExpression>($1), std::unique_ptr<ASTExpression>($3));
  };
 andExpr: unaryRelExpr {$$ = $1;} | andExpr LOGICAL_AND unaryRelExpr {
   /* fill in */
+  $$ = new ASTExpressionAnd(std::unique_ptr<ASTExpression>($1), std::unique_ptr<ASTExpression>($3));
  };
 unaryRelExpr: LOGICAL_NOT unaryRelExpr {
   //logical not isn't implmented in ast, so we just don't do anything

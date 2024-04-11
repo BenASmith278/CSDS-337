@@ -189,8 +189,8 @@ selStmt: IF LPAREN expr RPAREN stmt {
 iterStmt: WHILE LPAREN expr RPAREN stmt {
   /* fill in */
   $$ = new ASTStatementWhile(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTStatement>($5));
- } | FOR LPAREN stmt SEMICOLON expr SEMICOLON stmt RPAREN stmt {
-  $$ = new ASTStatementFor(std::unique_ptr<ASTStatement>($9), std::unique_ptr<ASTStatement>($3), std::unique_ptr<ASTExpression>($5), std::unique_ptr<ASTStatement>($7));
+ } | FOR LPAREN stmt expr SEMICOLON stmt RPAREN stmt {
+  $$ = new ASTStatementFor(std::unique_ptr<ASTStatement>($8), std::unique_ptr<ASTStatement>($3), std::unique_ptr<ASTExpression>($4), std::unique_ptr<ASTStatement>($6));
  };
 
 /* fill in grammar and code action for for-loops */
@@ -203,6 +203,7 @@ jumpStmt: RETURN SEMICOLON {
   /* fill in */
   auto retStmt = new ASTStatementReturn();
   retStmt->returnExpression = std::unique_ptr<ASTExpression>($2);
+  $$ = retStmt;
  }; /* There should also be break statements here, but they are not implemented in the AST */
 
 expr: orExpr { $$ = $1;} | ID EQUALS_SIGN expr {

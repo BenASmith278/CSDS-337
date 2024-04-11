@@ -57,6 +57,7 @@ static std::stringstream ss;
 <strlit>\n          { printf("Found newline in string\n"); }
 
 [_a-zA-Z][_a-zA-Z0-9]* {yylval.strval = strdup(yytext); return ID;}
+[\t\n ] {}
 . {printf("Unrecognized character %c\n", *yytext);}
 %%
 

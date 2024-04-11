@@ -14,7 +14,7 @@
 #include "../src/expressions/string.h"
 #include "../src/expressions/variable.h"
 #include "../src/expressions/addition.h"
-#include "../src/expressions/subtraction.h"
+#include "../src/expressions/sub.h"
 #include "../src/expressions/multiplication.h"
 #include "../src/expressions/division.h"
 #include "../src/expressions/assignment.h"
@@ -129,9 +129,8 @@ funDef: type ID LPAREN params RPAREN LBRACE varDecs stmts RBRACE {
    * - Then, create the parameters and make the function, as above.
    * - Add the variables in "varDecs" to the function as stack variables.
    * - Define the function by the ASTStatementBlock. */
-  auto statements = ASTStatementBlock();
+  auto statements = new ASTStatementBlock();
   auto parameters = ASTFunctionParameters();
-  auto declarations = ASTFunctionParameters();
   bool variadic = false;
   for(auto s : *$8) {
     statements->statements.push_back(std::unique_ptr<ASTStatement>(s));
@@ -141,12 +140,12 @@ funDef: type ID LPAREN params RPAREN LBRACE varDecs stmts RBRACE {
     if (p) parameters.push_back(std::move(*p));
     else variadic = true;
   }
-  auto f = ast.AddFunction($2, std::unique_ptr<VarType>($1), std::move(parameters), variadic)
+  auto f = ast.AddFunction($2, std::unique_ptr<VarType>($1), std::move(parameters), variadic);
 
   for(auto d : *$7) {
-    f.AddStackVar(std::move(*d));
+    f->AddStackVar(std::move(*d));
   }
-  auto p = f.Define(std::unique_ptr<ASTStatement>(statementBlock));
+  f->Define(std::unique_ptr<ASTStatement>(statements));
  };
 params: paramList | {$$ = new std::vector<ASTFunctionParameter *>();};
 paramList: paramList COMMA type ID { // This works similarly to varDecs
@@ -189,9 +188,9 @@ selStmt: IF LPAREN expr RPAREN stmt {
 
 iterStmt: WHILE LPAREN expr RPAREN stmt {
   /* fill in */
-  $$ = new ASTStatementWhile(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTExpression>($5));
- } | FOR LPAREN expr SEMICOLON expr SEMICOLON expr RPAREN stmt {
-  $$ = new ASTStatementFor(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTExpression>($5), std::unique_ptr<ASTExpression>($7), std::unique_ptr<ASTExpression>($9));
+  $$ = new ASTStatementWhile(std::unique_ptr<ASTExpression>($3), std::unique_ptr<ASTStatement>($5));
+ } | FOR LPAREN stmt SEMICOLON expr SEMICOLON stmt RPAREN stmt {
+  $$ = new ASTStatementFor(std::unique_ptr<ASTStatement>($9), std::unique_ptr<ASTStatement>($3), std::unique_ptr<ASTExpression>($5), std::unique_ptr<ASTStatement>($7));
  };
 
 /* fill in grammar and code action for for-loops */
@@ -208,7 +207,7 @@ jumpStmt: RETURN SEMICOLON {
 
 expr: orExpr { $$ = $1;} | ID EQUALS_SIGN expr {
   /* fill in (create an ASTExpressionAssignment) */
-  $$ = new ASTExpressionAssignment(std::unique_ptr<ASTExpression>($1), std::unique_ptr<ASTExpression>($3));
+  $$ = new ASTExpressionAssignment(std::unique_ptr<ASTExpression>(new ASTExpressionVariable($1)), std::unique_ptr<ASTExpression>($3));
  };
 orExpr: andExpr {$$ = $1;} | orExpr LOGICAL_OR andExpr {
   $$ = new ASTExpressionOr(std::unique_ptr<ASTExpression>($1), std::unique_ptr<ASTExpression>($3));

@@ -18,6 +18,7 @@ llvm::Value* ASTExpressionInt2Bool::Compile(llvm::IRBuilder<>& builder, ASTFunct
 
     // Finally compile the cast, we must use an R-Value to cast (we can't just use a raw variable).
     // Wow, some return thing is missing here!
+    return builder.CreateCmp(llvm::CmpInst::ICMP_NE, operand->CompileRValue(builder, func), llvm::ConstantInt::get(VarTypeSimple::IntType.GetLLVMType(builder.getContext()), 0));
 }
 
 std::string ASTExpressionInt2Bool::ToString(const std::string& prefix)

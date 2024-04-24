@@ -1,0 +1,6 @@
+Average time of ./build/O0 optimization: 1676.787400
+Average time of ./build/O1 optimization: 959.065400
+Average time of ./build/O2 optimization: 936.260300
+Average time of ./build/O3 optimization: 912.996800
+Average time of ./build/Ofast optimization: 960.202100
+Average time of ./build/Oz optimization: 969.536900

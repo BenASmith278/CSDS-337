@@ -1,0 +1,180 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{comment} % enables the use of multi-line comments (\ifx \fi) 
+\usepackage{lipsum} %This package just generates Lorem Ipsum filler text. 
+\usepackage{fullpage} % changes the margin
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage[fleqn]{amsmath}
+\usepackage{amssymb,amsthm}  % assumes amsmath package installed
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{verbatim}
+\usepackage[numbered]{mcode}
+\usepackage{float}
+\usepackage{tikz}
+    \usetikzlibrary{shapes,arrows}
+    \usetikzlibrary{arrows,calc,positioning}
+
+    \tikzset{
+        block/.style = {draw, rectangle,
+            minimum height=1cm,
+            minimum width=1.5cm},
+        input/.style = {coordinate,node distance=1cm},
+        output/.style = {coordinate,node distance=4cm},
+        arrow/.style={draw, -latex,node distance=2cm},
+        pinstyle/.style = {pin edge={latex-, black,node distance=2cm}},
+        sum/.style = {draw, circle, node distance=1cm},
+    }
+\usepackage{xcolor}
+\usepackage{mdframed}
+\usepackage[shortlabels]{enumitem}
+\usepackage{indentfirst}
+\usepackage{hyperref}
+    
+\renewcommand{\thesubsection}{\thesection.\alph{subsection}}
+
+\newenvironment{problem}[2][Problem]
+    { \begin{mdframed}[backgroundcolor=gray!20] \textbf{#1 #2} \\}
+    {  \end{mdframed}}
+
+% Define solution environment
+\newenvironment{solution}
+    {\textit{Solution:}}
+    {}
+
+\renewcommand{\qed}{\quad\qedsymbol}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%Header-Make sure you update this information!!!!
+\noindent
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\large\textbf{Benjamin Smith} \hfill \textbf{Problem Set - 6}   \\
+Email: bxs566@case.edu \hfill ID: 3559750 \\
+\normalsize Course: CSDS 337 - Compiler Design \hfill Term: Spring 2024\\
+Instructor: Dr. Vipin Chaudhary \hfill Due Date: $24^{th}$ April, 2024 \\ \\
+Number of hours delay for this Problem Set: \hfill 0.\\
+Cumulative number of hours delay so far: \hfill 56. \\ \\
+I discussed this homework with: \hfill No one. \\ \\
+%\underline{\bf SUBMISSION GUIDELINES:} Submit a zip file that includes the %written answers and the flex file for Problem 4. \\
+
+\noindent\rule{7in}{2.8pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{problem}{1 - 10 points}
+Generate code for the following three-address statements assuming \verb!a! and \verb!b! are arrays whose elements are 4-byte values. The four-statement sequence
+\begin{verbatim}
+x = a[i]  
+y = b[j]  
+a[i] = y  
+b[j] = x  
+\end{verbatim}
+
+\end{problem}
+\begin{solution}
+\end{solution}
+
+\noindent\rule{7in}{2.8pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}{2 - 10 points}
+Determine the cost of executing the following.
+\begin{enumerate}
+    \item \begin{verbatim}
+        LD R0, c  
+        LD R1, i  
+        MUL R1, R1, 8  
+        ST a(R1), R0  
+    \end{verbatim}
+    \item \begin{verbatim}
+        LD R0, p  
+        LD R1, 0(R0) 
+        ST x, R1  
+    \end{verbatim}
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\end{solution}
+
+\noindent\rule{7in}{2.8pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}{3 - 10 points}
+Below is code to count the number of primes from 2 to  n , using the sieve method on a suitably large array a. That is, a [i] is TRUE at  the end only if there is no prime $\sqrt i$ or less that evenly divides i. We initialize  all a[i] to TRUE and then set a[j] to FALSE if we find a divisor of j.
+
+\begin{verbatim}
+for (i=2; i<=n; i++)    
+    a[i] = TRUE;      
+count = 0;     
+s = sqrt(n);     
+for (i=2; i<=s; i++)    
+    if (a[i]) /* i has been found to be a prime */ {}  
+        count++;    
+        for (j=2*i; j<=n; j = j+i)    
+            a[j] = FALSE; /* no multiple of i is a prime */  
+    }
+\end{verbatim}
+
+\begin{enumerate}[a]
+    \item Translate the program into three-address statements of the type we have  been using in this section. Assume integers require 4 bytes.
+    \item Construct the flow graph for your code from (a)
+    \item Identify the loops in your flow graph from (b).
+
+\end{enumerate}
+\end{problem}
+\begin{solution}
+\end{solution}
+
+\noindent\rule{7in}{2.8pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}{4 - 10 points}
+Suppose a basic block is formed from the C assignment statements
+\begin{verbatim}
+    x = a + b + c + d + e + f;  
+    y = a + c + e;
+\end{verbatim}
+
+\begin{enumerate}[a]
+    \item Give the three-address statements (only one addition per statement) for  this block.
+    \item Use the associative and commutative laws to modify the block to use the  fewest possible number of instructions, assuming both x and y are live on  exit from the block.
+\end{enumerate}
+
+\end{problem}
+
+\begin{solution}
+\end{solution}
+
+
+\noindent\rule{7in}{2.8pt}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Problem 5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}{5 - 20 points}
+Consider the expression $(a-b) + e * (c+d)$.
+\begin{enumerate}[a]
+    \item Generate optimized code using three registers.
+    \item Generate optimized code using two registers.
+\end{enumerate}
+
+\end{problem}
+
+\begin{solution}
+\end{solution}
+
+\noindent\rule{7in}{2.8pt}
+
+\end{document}

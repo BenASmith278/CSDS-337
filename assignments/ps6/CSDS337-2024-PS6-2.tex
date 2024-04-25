@@ -13,6 +13,7 @@
 \usepackage{verbatim}
 \usepackage[numbered]{mcode}
 \usepackage{float}
+\usepackage{circuitikz}
 \usepackage{tikz}
     \usetikzlibrary{shapes,arrows}
     \usetikzlibrary{arrows,calc,positioning}
@@ -74,6 +75,16 @@ b[j] = x
 
 \end{problem}
 \begin{solution}
+    \begin{verbatim}
+    LD R1, i
+    MUL R1, R1, 4
+    LD R2, a(R1)
+    LD R3, j
+    MUL R3, R3, 4
+    LD R4, b(R3)
+    ST a(R1), R4
+    ST b(R3), R2
+    \end{verbatim}
 \end{solution}
 
 \noindent\rule{7in}{2.8pt}
@@ -99,6 +110,10 @@ Determine the cost of executing the following.
 \end{enumerate}
 \end{problem}
 \begin{solution}
+    \begin{enumerate}
+        \item $2 + 2 + 2 + 2 = 8$
+        \item $2 + 2 + 2 = 6$
+    \end{enumerate}
 \end{solution}
 
 \noindent\rule{7in}{2.8pt}
@@ -131,6 +146,80 @@ for (i=2; i<=s; i++)
 \end{enumerate}
 \end{problem}
 \begin{solution}
+    \begin{enumerate}[a]
+        \item \begin{verbatim}
+            B1      1)  i = 2
+
+            B2      2)  if i > n goto(7)
+
+            B3      3)  t1 = i * 4
+                    4)  a[t1] = TRUE
+                    5)  i = i + 1
+                    6)  goto(2)
+
+            B4      7)  count = 0
+                    8)  s = sqrt(n)
+                    9)  i = 2
+        
+            B5      10)  if i > s goto(22)
+
+            B6      11)  t2 = i * 4
+                    12)  ifFalse a[t2] goto(20)
+
+            B7      13)  count = count + 1
+                    14)  j = 2 * i
+
+            B8      15)  if j > n goto(20)
+
+            B9      16)  t3 = j * 4
+                    17)  a[t3] = FALSE
+                    18) j = j + i
+                    19)  goto(15)
+
+            B10     20)  i = i + 1
+                    21)  goto(10)
+        \end{verbatim}
+
+        \item Graph:\\
+        \begin{figure}[!ht]
+    \centering
+        \begin{circuitikz}[scale=0.5, transform shape]
+            \tikzstyle{every node}=[font=\LARGE]
+            \node [font=\LARGE] at (7.25,13.5) {};
+            \node [font=\LARGE] at (7.25,13.5) {};
+            \draw  (2.5,14) rectangle  node {\LARGE ENTRY} (7.5,12.75);
+            \draw  (2.5,11.5) rectangle  node {\LARGE B1} (7.5,10.25);
+            \draw  (2.5,9) rectangle  node {\LARGE B2} (7.5,7.75);
+            \draw  (2.5,6.5) rectangle  node {\LARGE B3} (7.5,5.25);
+            \draw  (2.5,4) rectangle  node {\LARGE B4} (7.5,2.75);
+            \draw  (2.5,1.5) rectangle  node {\LARGE B5} (7.5,0.25);
+            \draw  (2.5,-1) rectangle  node {\LARGE B6} (7.5,-2.25);
+            \draw  (2.5,-3.5) rectangle  node {\LARGE B7} (7.5,-4.75);
+            \draw  (2.5,-6) rectangle  node {\LARGE B8} (7.5,-7.25);
+            \draw  (2.5,-8.5) rectangle  node {\LARGE B9} (7.5,-9.75);
+            \draw  (2.5,-11) rectangle  node {\LARGE B10} (7.5,-12.25);
+            \draw  (2.5,-13.5) rectangle  node {\LARGE EXIT} (7.5,-14.75);
+            \draw [->, >=Stealth] (5,12.75) -- (5,11.5);
+            \draw [->, >=Stealth] (5,10.25) -- (5,9);
+            \draw [->, >=Stealth] (5,7.75) -- (5,6.5);
+            \draw [->, >=Stealth] (5,2.75) -- (5,1.5);
+            \draw [->, >=Stealth] (5,0.25) -- (5,-1);
+            \draw [->, >=Stealth] (5,-2.25) -- (5,-3.5);
+            \draw [->, >=Stealth] (5,-4.75) -- (5,-6);
+            \draw [->, >=Stealth] (5,-7.25) -- (5,-8.5);
+            \draw [->, >=Stealth] (2.5,5.75) .. controls (0,5.75) and (0,8.5) .. (2.5,8.5) ;
+            \draw [->, >=Stealth] (7.5,8.25) .. controls (10,6.75) and (10,5) .. (7.5,3.25) ;
+            \draw [->, >=Stealth] (2.5,-11.5) .. controls (0,-9) and (0,-2) .. (2.5,1) ;
+            \draw [->, >=Stealth] (7.5,-6.5) .. controls (9.75,-7.5) and (9.75,-10.25) .. (7.25,-11) ;
+            \draw [->, >=Stealth] (7.5,-1.5) .. controls (10,-8.5) and (10,-10) .. (7.5,-11.75) ;
+            \draw [->, >=Stealth] (7.5,1) .. controls (10.75,-1.75) and (10.75,-11.5) .. (7.5,-14.25) ;
+            \draw [->, >=Stealth] (2.5,-9) .. controls (1,-9.5) and (1,-6) .. (2.5,-6.5);
+        \end{circuitikz}
+
+    \label{fig:my_label}
+    \end{figure}
+    \item B2, B3 \\ B5, B6, B10 \\ B5, B6, B7, B8, B10 \\ B8, B9
+    \end{enumerate}
 \end{solution}
 
 \noindent\rule{7in}{2.8pt}
@@ -154,6 +243,28 @@ Suppose a basic block is formed from the C assignment statements
 \end{problem}
 
 \begin{solution}
+    \begin{enumerate}[a]
+        \item\begin{verbatim}
+            t1 = a + b
+            t2 = t1 + c
+            t3 = t2 + d
+            t4 = t3 + e
+            t5 = t4 + f
+            x = t5
+            t6 = a + c
+            t7 = c + e
+            y = t6 + t7
+        \end{verbatim}
+        \item\begin{verbatim}
+            t1 = a + c
+            t2 = t1 + e
+            y = t2
+            t3 = t2 + b
+            t4 = t3 + d
+            t5 = t4 + f
+            x = t5
+        \end{verbatim}
+    \end{enumerate}
 \end{solution}
 
 
@@ -173,6 +284,32 @@ Consider the expression $(a-b) + e * (c+d)$.
 \end{problem}
 
 \begin{solution}
+    \begin{enumerate}[a]
+        \item\begin{verbatim}
+            LD  R3, d
+            LD  R2, c
+            ADD R3, R2, R3
+            LD  R2, e 
+            MUL R3, R2, R3
+            LD  R2, b
+            LD  R1, a
+            SUB R2, R1, R2
+            ADD R3, R2, R3
+        \end{verbatim}
+        \item \begin{verbatim}
+            LD  R2, d
+            LD  R1, c
+            ADD R2, R1, R2
+            LD  R1, e
+            MUL R2, R1, R2
+            ST  t3, R2
+            LD  R2, b
+            LD  R1, a
+            SUB R2, R1, R2
+            LD  R1, t3
+            ADD R2, R2, R1
+        \end{verbatim}
+    \end{enumerate}
 \end{solution}
 
 \noindent\rule{7in}{2.8pt}
